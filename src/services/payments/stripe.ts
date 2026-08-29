@@ -87,7 +87,7 @@ export async function createStripeCheckout({
       payment_type: 'cv_download',
     });
 
-    return { sessionId: session.id, url: session.url };
+    return { sessionId: session.id, url: session.url || undefined };
   } catch (error) {
     console.error('Stripe checkout error:', error);
     return { error: 'Failed to create checkout session' };
