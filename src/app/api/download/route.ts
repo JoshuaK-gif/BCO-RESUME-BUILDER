@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     const design: DesignSettings = resumeData?.design_settings || { font: 'Inter', fontSize: 11, headingSize: 14, accentColor: '#1e40af', lineHeight: 1.5, margins: 15, sectionSpacing: 12, layout: 'classic', sectionOrder: ['summary', 'experience', 'education', 'skills', 'projects', 'certifications', 'languages'], nameSize: 28, subtitleSize: 16, boldHeadings: true, uppercaseHeadings: true };
     const templateId = resumeData?.template_id || 'modern-1';
 
-    const html = buildResumeHTML(content, design, templateId);
+    const html = await buildResumeHTML(content, design, templateId);
     const pdfBuffer = await generatePDF(html);
 
     // Increment download count

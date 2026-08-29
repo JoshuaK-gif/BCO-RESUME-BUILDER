@@ -1,6 +1,5 @@
 import puppeteer from 'puppeteer-core';
 import React from 'react';
-import { renderToString } from 'react-dom/server';
 import { ResumeContent, DesignSettings } from '@/types/resume';
 
 // Import all template components
@@ -150,7 +149,8 @@ const templateMap: Record<string, React.ComponentType<{ content: ResumeContent; 
   'premium-multicolor': PremiumMultiColorTemplate, 'premium-modern-duo': PremiumModernDuoTemplate,
 };
 
-function renderTemplateToHTML(content: ResumeContent, design: DesignSettings, templateId: string): string {
+async function renderTemplateToHTML(content: ResumeContent, design: DesignSettings, templateId: string): Promise<string> {
+  const { renderToString } = await import('react-dom/server');
   const TemplateComponent = templateMap[templateId] || ModernTemplate;
   const html = renderToString(
     React.createElement(TemplateComponent, { content, design })
@@ -181,8 +181,8 @@ export async function generatePDF(html: string): Promise<Buffer> {
   }
 }
 
-export function buildResumeHTML(content: ResumeContent, design: DesignSettings, templateId: string): string {
-  const rendered = renderTemplateToHTML(content, design, templateId);
+export async function buildResumeHTML(content: ResumeContent, design: DesignSettings, templateId: string): Promise<string> {
+  const rendered = await renderTemplateToHTML(content, design, templateId);
   return `<!DOCTYPE html>
 <html>
 <head>
